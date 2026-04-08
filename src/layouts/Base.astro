@@ -9,6 +9,7 @@ import {
 import { createPublicPageContext } from "emdash/page";
 import LiveSearch from "emdash/ui/search";
 import "../styles/theme.css";
+import { getSiteSetting } from "emdash";
 
 interface Props {
 	title: string;
@@ -42,7 +43,7 @@ const fullTitle = title.includes(siteTitle) ? title : `${title} — ${siteTitle}
 
 // Fetch primary menu defined in seed
 const menu = await getMenu("primary");
-
+const logo = await getSiteSetting("logo");
 // Fetch pages for footer
 const { entries: pages } = await getEmDashCollection("pages");
 
@@ -97,7 +98,10 @@ const isLoggedIn = !!Astro.locals.user;
 		<EmDashBodyStart page={pageCtx} />
 		<header class="site-header">
 			<nav class="nav">
-				<a href="/" class="site-title">{siteTitle}</a>
+				<a href="/" class="site-title">
+					<!-- @ts-ignore -->
+					{logo && <img src={logo.url} alt={siteTitle} />}
+				</a>
 				<div class="nav-right">
 					<LiveSearch
 						placeholder="Search..."
